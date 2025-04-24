@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zufallsgenerator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background: #D4C1EC; /* Hintergrundfarbe geändert */
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      text-align: center;
+      color: #222; /* Schriftfarbe auf dunkles Grau gesetzt */
+    }
+
+    header {
+      padding: 30px 0 10px;
+    }
+
+    header img {
+      border: none; /* Bild ohne Umrandung */
+      width: 300px; /* Breite auf 300px gesetzt */
+      height: auto; /* Höhe passt sich der Breite an */
+      object-fit: cover; /* Bild bleibt unverzerrt */
+    }
+
+    h1 {
+      font-size: 2.4rem;
+      margin: 25px 0 15px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      width: 90%;
+      max-width: 600px;
+      margin-top: 20px; /* Verringert den Abstand zwischen der Überschrift und den Themen */
+    }
+
+    #display {
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      font-size: 1.6rem;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      display: none;
+      animation: fadeIn 0.3s ease-in-out;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      width: 80%;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.97); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    button {
+      margin-top: 30px;
+      padding: 20px 45px;
+      font-size: 1.5rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 999px;
+      background-color: #333;
+      color: white;
+      cursor: pointer;
+      font-family: inherit;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #111;
+    }
+
+    #retryButton {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px 25px;
+      font-size: 1.1rem;
+      opacity: 0.85;
+      display: none;
+    }
+
+    @media (max-width: 500px) {
+      main {
+        margin-top: 8vh;
+      }
+
+      #display {
+        font-size: 1.3rem;
+        padding: 25px;
+      }
+
+      button {
+        font-size: 1.4rem;
+        padding: 18px 40px;
+      }
+
+      #retryButton {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="https://github.com/traumfunke/test3/blob/main/Cheers%20to%20Us.png?raw=true" alt="Mein Bild" />
+  </header>
+
+  <h1>Fantasie & Utopie</h1>
+
+  <main>
+    <div id="display"></div>
+    <button id="startButton" onclick="startRoll()">Start</button>
+  </main>
+
+  <button id="retryButton" onclick="restart()">Nochmal</button>
+
+  <script>
+    const begriffe = [
+      "Wenn wir in einer Fantasiewelt leben würden – wie sähe sie aus?",
+      "Wenn wir zwei Superheld:innen wären – welche Kräfte hätten wir?",
+      "In welcher Zeit (Vergangenheit oder Zukunft) würdest du mit mir leben wollen?",
+      "Wenn wir in einem Film mitspielen könnten – welches Genre wäre es und wie wäre unser Plot?",
+      "Welche utopische Gesellschaft würden wir gründen? Was wäre ihr wichtigster Wert?",
+      "Wie sähe unser perfektes gemeinsames Leben aus – ohne Grenzen oder Verpflichtungen?",
+      "Wenn wir ein eigenes kleines Königreich hätten – wie würden wir es regieren?",
+      "Was wäre unser „Magischer Ort“, den nur wir kennen und der uns heilt?",
+      "Wenn unsere Liebe eine Farbe wäre – welche wäre es und warum?",
+      "Wenn wir ein Jahr lang reisen könnten – wohin würde es gehen und wie würden wir leben?",
+      "Wenn alles möglich wäre – wie würde ein idealer Tag für uns aussehen?",
+      "Was wäre dein Liebesbrief an mich aus einer Zukunft, die noch nicht existiert?",
+      "In welchem Film- oder Serienuniversum würden wir als Paar perfekt hineinpassen?",
+      "Wie sähe unser eigenes Liebesmärchen aus?",
+      "Wenn wir gemeinsam ein Fantasiewesen wären – wie würde es aussehen und heißen?",
+      "Wenn wir ein Buch über unsere Zukunft schreiben könnten – was stünde auf der letzten Seite?",
+      "Was würdest du in einer perfekten Welt tun, was dir hier unmöglich erscheint?",
+      "Wie sähe unsere Liebe aus, wenn wir in einer Welt ohne Zeit leben würden?",
+      "Wenn du mir eine perfekte Zukunft in Gedanken „schenken“ könntest – wie wäre sie?",
+      "Welche utopische Fähigkeit würdest du dir für unsere Beziehung wünschen?",
+      "Wenn unsere Beziehung ein Lied wäre – wie würde es klingen?",
+      "Wenn wir einen eigenen Feiertag hätten – wie würde er heißen und was würden wir tun?",
+      "Wenn du mit mir eine Fantasie-Reise machen könntest, wohin ginge sie – real oder ausgedacht?",
+      "In welchem Element (Feuer, Wasser, Luft, Erde) liegt die Energie unserer Beziehung?",
+      "Wenn du unsere Liebe als Landschaft beschreiben müsstest – wie sähe sie aus?",
+      "Was wäre das Symbol unserer Verbindung, wenn du frei wählen könntest?",
+      "Wenn wir unser Leben als Theaterstück inszenieren würden – welches Thema hätte es?",
+      "Wie wäre unsere Beziehung, wenn wir zwei Sterne im Universum wären?",
+      "Was wäre ein völlig verrückter Wunsch, den du mit mir teilen würdest, wenn alles erlaubt wäre?",
+      "Wenn unsere Beziehung ein Duft wäre – wonach würde er riechen?",
+      "Wie würde unsere gemeinsame Zukunft in einem Science-Fiction-Roman aussehen?",
+      "Wenn wir einen Tag lang unsichtbar wären – was würden wir gemeinsam tun?",
+      "Wenn wir in einem anderen Körper für einen Tag leben könnten – was würden wir ausprobieren?",
+      "Welche Fantasiewelt aus Büchern, Filmen oder Träumen würdest du mit mir erkunden wollen?",
+      "Wenn du einen Wunsch frei hättest, um unsere Beziehung zu „verzaubern“ – was würdest du tun?",
+      "Wenn es einen „Liebeszauber“ gäbe, den nur wir kennen – wie wirkt er?",
+      "Was wäre deine persönliche Definition von einer utopischen Partnerschaft?",
+      "Wenn wir unser eigenes Universum erschaffen könnten – was wäre dort anders als hier?",
+      "Wie würde eine völlig verrückte, aber liebevolle Zukunftsidee aussehen, die nur uns betrifft?",
+      "Wenn du eine Botschaft an unser zukünftiges Ich senden könntest – was würdest du sagen?"
+    ];
+
+    let interval;
+
+    function startRoll() {
+      const display = document.getElementById("display");
+      const startButton = document.getElementById("startButton");
+      const retryButton = document.getElementById("retryButton");
+      
+      startButton.style.display = "none"; // Hide the start button
+      display.style.display = "block"; // Show the display div
+
+      let index = 0;
+
+      interval = setInterval(() => {
+        display.textContent = begriffe[index];
+        index = (index + 1) % begriffe.length;
+      }, 150);
+
+      setTimeout(() => {
+        clearInterval(interval);
+        display.textContent = begriffe[Math.floor(Math.random() * begriffe.length)];
+        retryButton.style.display = "inline-block";
+      }, 3000);
+    }
+
+    function restart() {
+      const display = document.getElementById("display");
+      const retryButton = document.getElementById("retryButton");
+      const startButton = document.getElementById("startButton");
+
+      retryButton.style.display = "none";
+      display.style.display = "none";
+      startButton.style.display = "inline-block";
+    }
+  </script>
+</body>
+</html>
